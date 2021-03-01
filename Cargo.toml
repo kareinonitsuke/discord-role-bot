@@ -1,0 +1,21 @@
+[package]
+name = "regular-meeting-announcement"
+version = "0.1.0"
+authors = ["kareinonitsuke"]
+edition = "2018"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+tokio = { version = "1.0", features = ["macros", "rt-multi-thread"] }
+scan_fmt = "0.2.6"
+
+[dependencies.serenity]
+default-features = false
+features = [
+    "client",
+    "gateway",
+    "model",
+    "rustls_backend",
+]
+version = "0.10"
