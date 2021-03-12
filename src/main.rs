@@ -4,9 +4,15 @@ use serenity::{
     model::{channel::Message, gateway::Ready},
     prelude::*,
     utils::MessageBuilder,
+    builder::{EditMember,EditRole}
 };
 
 struct Handler;
+
+enum TypeOfCommand{
+    Role(String),
+    RMeeting(String),
+}
 
 #[macro_use]
 extern crate scan_fmt;
@@ -16,27 +22,31 @@ impl EventHandler for Handler {
     async fn message(&self, ctx: Context, msg: Message) {
         let channel_name = get_channel_name(&ctx,&msg).await;
         println!("channelIs:{}", channel_name);
-
-        let add_role_command = "i-want-an-announcement";
-        let remove_role_command = "i-don't-want-an-announcement";
-        let role_str = "RM-announce";
-        
         if is_target_channel(channel_name).await {
-            let command_string = &msg.content;
-            println!("command is:{}", command_string);
-            
-            if command_string.starts_with(add_role_command){
-                post_message(&ctx,&msg,"roleふってあげたいね".to_string()).await;
-            }
-            else if command_string.starts_with(remove_role_command){
-                post_message(&ctx,&msg,"role外してあげたいね".to_string()).await;
-            }
+            role_setting(&ctx,&msg,&msg.content).await;
         }
     }
 
     async fn ready(&self, _: Context, ready: Ready) {
         println!("{} is connected!", ready.user.name);
     }
+}
+
+
+async fn role_setting(ctx: &Context, msg: &Message, role_string: &String) -> bool{
+    let add_role_command = "!role-i-want-an-announcement";
+    let remove_role_command = "!role-i-don't-want-an-announcement";
+    let role = "RM-announce";
+    
+    println!("command is:{}", role_string);
+    
+    if role_string.starts_with(add_role_command){
+        post_message(&ctx,&msg,"roleふってあげたいね".to_string()).await;
+    }
+    else if role_string.starts_with(remove_role_command){
+        post_message(&ctx,&msg,"role外してあげたいね".to_string()).await;
+    }
+    return true;
 }
 
 async fn have_a_role() -> bool {
