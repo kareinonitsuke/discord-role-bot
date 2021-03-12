@@ -1,5 +1,5 @@
-use std::env;
-use serenity::{
+pub use std::env;
+pub use serenity::{
     async_trait,
     model::{channel::Message, gateway::Ready},
     prelude::*,
@@ -7,19 +7,17 @@ use serenity::{
     builder::{EditMember,EditRole}
 };
 
-struct Handler;
+pub struct Handler;
 
-enum TypeOfCommand{
+pub enum TypeOfCommand{
     Role(String),
-    RMeeting(String),
+    Questionnaire(String),
+    UnknownCommand,
 }
 
 pub mod role;
 pub mod common;
 //use crate::common::{post, channel};
-
-#[macro_use]
-extern crate scan_fmt;
 
 #[async_trait]
 impl EventHandler for Handler {
@@ -27,10 +25,15 @@ impl EventHandler for Handler {
         let channel_name = common::channel::get_channel_name(&ctx,&msg).await;
         println!("channelIs:{}", channel_name);
         if common::channel::is_target_channel(channel_name).await {
-            role::role_setting(&ctx,&msg,&msg.content).await;
+            let command_and_type = common::command::distinction_command(&msg.content).await;
+            match command_and_type{
+                TypeOfCommand::Role(command) => role::role_setting(&ctx,&msg,&command).await,
+                TypeOfCommand::Questionnaire(command) => println!("{}",command),
+                TypeOfCommand::UnknownCommand => println!("UnknownCommand"),
+            }
+            
         }
     }
-
     async fn ready(&self, _: Context, ready: Ready) {
         println!("{} is connected!", ready.user.name);
     }

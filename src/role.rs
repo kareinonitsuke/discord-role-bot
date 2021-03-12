@@ -1,6 +1,6 @@
-pub async fn role_setting(ctx: &crate::Context, msg: &crate::Message, role_string: &String) -> bool{
-    let add_role_command = "!role-i-want-an-announcement";
-    let remove_role_command = "!role-i-don't-want-an-announcement";
+pub async fn role_setting(ctx: &crate::Context, msg: &crate::Message, role_string: &String) {
+    let add_role_command = "i-want-an-announcement";
+    let remove_role_command = "i-don't-want-an-announcement";
     let role = "RM-announce";
     
     println!("command is:{}", role_string);
@@ -11,7 +11,6 @@ pub async fn role_setting(ctx: &crate::Context, msg: &crate::Message, role_strin
     else if role_string.starts_with(remove_role_command){
         crate::common::post::post_message(&ctx,&msg,"role外してあげたいね".to_string()).await;
     }
-    return true;
 }
 
 async fn have_a_role() -> bool {
