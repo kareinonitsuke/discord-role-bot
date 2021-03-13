@@ -1,23 +1,15 @@
-pub use std::env;
-pub use serenity::{
+mod role;
+mod common;
+
+use std::env;
+use serenity::{
     async_trait,
     model::{channel::Message, gateway::Ready},
     prelude::*,
-    utils::MessageBuilder,
-    builder::{EditMember,EditRole}
 };
 
-pub struct Handler;
-
-pub enum TypeOfCommand{
-    Role(String),
-    Questionnaire(String),
-    UnknownCommand,
-}
-
-pub mod role;
-pub mod common;
-//use crate::common::{post, channel};
+use crate::common::command;
+struct Handler;
 
 #[async_trait]
 impl EventHandler for Handler {
@@ -27,9 +19,9 @@ impl EventHandler for Handler {
         if common::channel::is_target_channel(channel_name).await {
             let command_and_type = common::command::distinction_command(&msg.content).await;
             match command_and_type{
-                TypeOfCommand::Role(command) => role::role_setting(&ctx,&msg,&command).await,
-                TypeOfCommand::Questionnaire(command) => println!("{}",command),
-                TypeOfCommand::UnknownCommand => println!("UnknownCommand"),
+                command::TypeOfCommand::Role(command) => role::role_setting(&ctx,&msg,&command).await,
+                command::TypeOfCommand::Questionnaire(command) => println!("{}",command),
+                command::TypeOfCommand::UnknownCommand => println!("UnknownCommand"),
             }
             
         }
