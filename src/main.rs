@@ -17,8 +17,8 @@ impl EventHandler for Handler {
     async fn message(&self, ctx: Context, msg: Message) {
         let channel_name = common::channel::get_channel_name(&ctx,&msg).await;
         println!("channelIs:{}", channel_name);
-        if common::channel::is_target_channel(channel_name).await {
-            let command_and_type = common::command::distinction_command(&msg.content).await;
+        if common::channel::is_target_channel(channel_name){
+            let command_and_type = common::command::distinction_command(&msg.content);
             match command_and_type{
                 command::TypeOfCommand::Role(command)
                     => role::role_setting(&ctx,&msg,&command).await,

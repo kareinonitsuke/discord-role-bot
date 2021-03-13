@@ -17,7 +17,12 @@ pub async fn create_questionnaire(ctx: &Context, msg: &Message, role_string: &St
     
     println!("command is:{}", role_string);
     
-    if role_string.starts_with(questionnaire_command){
+    if  role_string.starts_with(questionnaire_command){
         post::post_message(&ctx,&msg,"RM用にアンケート作ってあげたいね".to_string()).await;
     }
+    else{
+        post::post_message(&ctx,&msg,"RM用のなにをすればよいでしょう".to_string()).await;
+    }
+
 }
+
