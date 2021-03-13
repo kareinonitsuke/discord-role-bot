@@ -1,5 +1,6 @@
 mod role;
 mod common;
+mod questionnaire;
 
 use std::env;
 use serenity::{
@@ -19,11 +20,13 @@ impl EventHandler for Handler {
         if common::channel::is_target_channel(channel_name).await {
             let command_and_type = common::command::distinction_command(&msg.content).await;
             match command_and_type{
-                command::TypeOfCommand::Role(command) => role::role_setting(&ctx,&msg,&command).await,
-                command::TypeOfCommand::Questionnaire(command) => println!("{}",command),
-                command::TypeOfCommand::UnknownCommand => println!("UnknownCommand"),
+                command::TypeOfCommand::Role(command)
+                    => role::role_setting(&ctx,&msg,&command).await,
+                command::TypeOfCommand::Questionnaire(command)
+                    => questionnaire::create_questionnaire(&ctx,&msg,&command).await,
+                command::TypeOfCommand::UnknownCommand
+                    => println!("UnknownCommand"),
             }
-            
         }
     }
     async fn ready(&self, _: Context, ready: Ready) {
