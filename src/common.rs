@@ -31,7 +31,7 @@ pub mod channel{
         return channel_name.to_string();
     }
     
-    pub async fn is_target_channel(channel_name: String) -> bool {
+    pub fn is_target_channel(channel_name: String) -> bool {
         let target_channel = env::var("TARGET_CHANNEL")
             .expect("Expected a target channnel");
         if channel_name != target_channel {
@@ -49,7 +49,7 @@ pub mod command{
         Questionnaire(String),
         UnknownCommand,
     }
-    pub async fn distinction_command(command: &String) -> TypeOfCommand {
+    pub fn distinction_command(command: &String) -> TypeOfCommand {
         if command.starts_with("!role-"){
             println!("Role command");
             return TypeOfCommand::Role(command[6..].to_string());
