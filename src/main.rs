@@ -8,7 +8,7 @@ use serenity::{
     model::{channel::Message, gateway::Ready},
     prelude::*,
 };
-
+#[macro_use] extern crate scan_fmt;
 use crate::common::command;
 struct Handler;
 
